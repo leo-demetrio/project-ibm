@@ -7,12 +7,18 @@ import ibm.grupo2.helloBank.service.IClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -31,7 +37,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientDto> create(@RequestBody ClientDto clientDto){
+    public ResponseEntity<ClientDto> create(@RequestBody @Valid ClientDto clientDto){
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(iClientService.create(clientDto).getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
@@ -44,7 +50,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientDto> update(@PathVariable UUID id, @RequestBody ClientDto clientDto){
+    public ResponseEntity<ClientDto> update(@PathVariable UUID id, @RequestBody @Valid ClientDto clientDto){
         return ResponseEntity.ok().body(modelMapper.map(iClientService.update(id, clientDto), ClientDto.class));
     }
 
@@ -54,7 +60,21 @@ public class ClientController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/cpf")
-    public ResponseEntity<Client> findByCpf(@RequestBody ClientDto clientDto){
+    public ResponseEntity<Client> findByCpf(@RequestBody @Valid ClientDto clientDto){
         return ResponseEntity.ok().body(iClientService.findByCpf(clientDto.getCpf()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex){
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String messageError = error.getDefaultMessage();
+            errors.put(fieldName, messageError);
+        });
+
+        return errors;
     }
 }
