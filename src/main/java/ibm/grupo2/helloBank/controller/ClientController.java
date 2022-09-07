@@ -5,6 +5,7 @@ import ibm.grupo2.helloBank.dto.ClientDto;
 import ibm.grupo2.helloBank.model.Client;
 import ibm.grupo2.helloBank.service.IClientService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("clients")
 @RequiredArgsConstructor
+@Log4j2
 public class ClientController {
 
     private final IClientService iClientService;
@@ -34,7 +36,7 @@ public class ClientController {
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ClientDto> create(@PathVariable UUID id){
         Client client = iClientService.findById(id);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client.getId()).toUri();
@@ -50,5 +52,9 @@ public class ClientController {
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         iClientService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/cpf")
+    public ResponseEntity<Client> findByCpf(@RequestBody ClientDto clientDto){
+        return ResponseEntity.ok().body(iClientService.findByCpf(clientDto.getCpf()));
     }
 }

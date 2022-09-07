@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,9 +15,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class Client {
+
     @Id
-    @GeneratedValue(generator = "UUID")
+
+    @GeneratedValue( generator = "uuid2" )
+    @Column( name = "id", columnDefinition = "BINARY(16)")
     private UUID id;
     private String name;
-    private String password;
+    private String cpf;
+    private String email;
+    private String telephone;
+    private int age;
 }

@@ -8,8 +8,10 @@ import java.util.UUID;
 
 public interface IClientService {
     Client findById(UUID uuid);
+    Client findByCpf(String cpf);
     List<Client> findAll();
     Client create(ClientDto clientDto);
     Client update(UUID uuid, ClientDto clientDto);
     void delete(UUID uuid);
+
 }

@@ -20,8 +20,8 @@ public class LocalConfig {
     @Bean
     public void seederDB(){
         clientRepository.deleteAll();
-        Client c = new Client(null, "Leo1", "123");
-        Client c1 = new Client(null, "Leo3", "123");
+        Client c = new Client(null, "Lucas",  "888888888", "lucas@gmail.com", "88888888", 18);
+        Client c1 = new Client(null, "Leo","999999999",  "leo@gmail.com", "999999999", 21);
 
         clientRepository.saveAll(List.of(c,c1));
     }

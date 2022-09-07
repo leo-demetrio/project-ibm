@@ -20,4 +20,13 @@ public class ResourceExceptionHandler {
                 request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(error);
     }
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<StandardError> noSuchElement(NoSuchElementException e, HttpServletRequest request){
+        StandardError error = new StandardError(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                e.getMessage(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(error);
+    }
 }
