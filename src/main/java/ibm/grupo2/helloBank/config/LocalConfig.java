@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 import java.util.List;
 
 @Configuration
-@Profile("local")
+@Profile("test")
 public class LocalConfig {
 
     @Autowired

@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -48,7 +49,8 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public Client findById(UUID id){
-        return clientRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Client not found"));
+        Optional<Client> obj = clientRepository.findById(id);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Client not found"));
     }
     @Override
     public Client findByCpf(String cpf){
